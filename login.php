@@ -1,3 +1,53 @@
+<?php
+
+session_start(); 
+require_once("config.php");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["ID"];
+    $password = $_POST["psw"];
+
+    $username = mysqli_real_escape_string($conn, $username);
+
+    $adminResult = $conn->query("SELECT * FROM admins WHERE username = '$username'");
+
+    if ($adminResult->num_rows > 0) {
+        $adminRow = $adminResult->fetch_assoc();
+        $adminStoredPassword = $adminRow["passw"];
+    
+        
+        if ($password === $adminStoredPassword) {
+            $_SESSION["admin_username"] = $username;
+            $_SESSION["is_admin"] = true;
+
+            header("Location: home.php");
+            exit();
+        } else {
+            echo "Error: Incorrect admin password.";
+        }
+    } else {
+        // Check if it's a regular user
+        $userResult = $conn->query("SELECT * FROM client WHERE username = '$username'");
+
+        if ($userResult->num_rows > 0) {
+            $userRow = $userResult->fetch_assoc();
+            $hashedPassword = $userRow["psw"];
+            if (password_verify($password, $hashedPassword)) {
+                $_SESSION["username"] = $username;
+                header("Location: home.php");
+                exit();
+            } else {
+                echo "Error: Incorrect password.";
+            }
+        } else {
+            echo "Error: User not found.";
+        }
+    }
+
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +68,7 @@
         </div>
         <div class="container-fluid d-flex flex-column align-items-center p-2">
             <h1>Login</h1>
-            <form action="home.php" method="POST" class="d-grid col-11 gap-3">
+            <form action="login.php" method="POST" class="d-grid col-11 gap-3">
                 <label  for="ID">User name</label>
                 <input class="rounded-2" type="text" name="ID" id="ID">
                 <label for="psw">Password</label>

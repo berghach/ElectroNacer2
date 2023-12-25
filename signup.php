@@ -18,13 +18,15 @@
         </div>
         <div class="container-fluid d-flex flex-column align-items-center p-2">
             <h1>Sign up</h1>
-            <form action="./home.php"  class="d-grid col-11 gap-3">
-                <label for="full_name">Full name</label>
-                <input class="rounded-2" type="text" name="full_name" id="full_name">
+            <form action="regist.php" method="POST"  class="d-grid col-11 gap-3">
+                <label for="full_name">User name</label>
+                <input class="rounded-2" type="text" name="user_name" id="user_name">
                 <label for="e-mail">E-mail</label>
-                <input class="rounded-2" type="email" name="e-mail" id="e-mail">
+                <input class="rounded-2" type="email" name="e_mail" id="e_mail">
                 <label for="psw">Password</label>
                 <input class="rounded-2" type="password" name="psw" id="psw" minlength="8">
+                <label for="confirm_psw">Confirm password</label>
+                <input class="rounded-2" type="password" name="confirm_psw" id="confirm_psw" minlength="8">
                 <button class="w-25 btn btn-light m-auto" type="submit">sign up</button>
             </form>
             <p class="mt-3">I already have an account: 
